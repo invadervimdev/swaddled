@@ -1,19 +1,27 @@
 defmodule Swaddled.ImporterTest do
   use Swaddled.DataCase
 
+  import Swaddled.ImporterFixtures
+
   alias Swaddled.Importer
 
-  @zip_file_path "test/support/files/my_spotify_data.zip"
+  setup_all do
+    %{zip_file: zip_file()}
+  end
 
-  describe "importer" do
-    test "successfully loads data" do
-      file = File.read!(@zip_file_path)
+  describe "load/1" do
+    test "successfully loads data", %{zip_file: file} do
+      assert {:ok, listens_count} = Importer.load(file)
+      assert Swaddled.Artists.list() |> Enum.count() == 6
+      assert Swaddled.Tracks.list() |> Enum.count() == 13
+      assert Swaddled.Listens.list() |> Enum.count() == listens_count
+    end
+  end
 
-      assert {:ok, 14} == Importer.load(file)
-
-      assert 6 == Swaddled.Artists.list() |> Enum.count()
-      assert 13 == Swaddled.Tracks.list() |> Enum.count()
-      assert 14 == Swaddled.Listens.list() |> Enum.count()
+  describe "upload/1" do
+    test "successfully uploads data", %{zip_file: file} do
+      assert {:ok, %{listens: listens_count}} = Importer.upload(file)
+      assert Swaddled.Listens.list() |> Enum.count() == listens_count
     end
   end
 end

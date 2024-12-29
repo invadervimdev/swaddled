@@ -36,6 +36,18 @@ defmodule Swaddled.Importer do
     end
   end
 
+  @doc """
+  Used by LiveView to load a file. This expects a file path.
+  """
+  @spec upload(binary()) :: {:ok, %{listens: non_neg_integer()}}
+  def upload(file) do
+    file
+    |> load()
+    |> case do
+      {:ok, count} -> {:ok, %{listens: count}}
+    end
+  end
+
   defp get_audio_filenames(handle) do
     {:ok, files} = :zip.zip_list_dir(handle)
 

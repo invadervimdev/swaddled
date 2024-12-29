@@ -17,7 +17,8 @@ defmodule SwaddledWeb.Router do
   scope "/", SwaddledWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", DashboardLive.Index
+    live "/import", ImportLive.Index
   end
 
   # Other scopes may use custom stacks.
