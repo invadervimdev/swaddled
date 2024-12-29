@@ -1,3 +1,27 @@
-<.header>
-  Dashboard
-</.header>
+<div class="text-center">
+  <h1 class="mb-4 text-4xl font-extrabold">
+    Your {@year} Swaddled
+  </h1>
+</div>
+
+<.live_component module={SwaddledWeb.CarouselComponent} id="top-carousel" total_cards={3}>
+  <.card :if={@active_card == 0} image_src={~p"/images/top_artists.webp"} title="Top Artists">
+    <ol class="list-decimal">
+      <%= for artist <- @top_artists  do %>
+        <li class="py-2">{artist.name} ({minutes(artist.ms)})</li>
+      <% end %>
+    </ol>
+  </.card>
+
+  <.card :if={@active_card == 1} image_src={~p"/images/top_tracks.webp"} title="Top Tracks">
+    <ol class="list-decimal">
+      <%= for track <- @top_tracks  do %>
+        <li class="py-2">{track.name} by {track.artist} ({minutes(track.ms)})</li>
+      <% end %>
+    </ol>
+  </.card>
+
+  <.card :if={@active_card == 2} image_src={~p"/images/top_genres.webp"} title="Top Genres">
+    Coming soon!
+  </.card>
+</.live_component>

@@ -13,7 +13,7 @@ defmodule SwaddledWeb.DashboardLive.IndexTest do
     test "shows the dashboard", %{conn: conn} do
       assert {:ok, _} = seed_data()
       assert {:ok, _index_live, html} = live(conn, ~p"/")
-      assert html =~ "Dashboard"
+      assert html =~ "Your #{Date.utc_today().year} Swaddled"
     end
   end
 end

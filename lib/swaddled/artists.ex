@@ -103,4 +103,29 @@ defmodule Swaddled.Artists do
   def change(%Artist{} = artist, attrs \\ %{}) do
     Artist.changeset(artist, attrs)
   end
+
+  @doc """
+  Shows the top 5 artists by total listening time.
+  """
+  @spec top(non_neg_integer()) :: list(%Artist{})
+  def top(year) do
+    import Ecto.Query
+
+    start_date = to_datetime(year)
+    end_date = to_datetime(year + 1)
+
+    query =
+      from l in Swaddled.Listens.Listen,
+        join: a in assoc(l, :artist),
+        group_by: a.name,
+        order_by: [desc: sum(l.ms_played)],
+        where: l.started_at >= ^start_date,
+        where: l.started_at < ^end_date,
+        select: %{name: a.name, ms: sum(l.ms_played)},
+        limit: 5
+
+    Repo.all(query)
+  end
+
+  defp to_datetime(year), do: year |> Date.new!(1, 1) |> DateTime.new!(~T[00:00:00])
 end
