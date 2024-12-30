@@ -55,6 +55,7 @@ defmodule SwaddledWeb.DashboardLive.Index do
 
   defp update_metrics(%{assigns: %{year: year}} = socket) do
     socket
+    |> assign(:total_time, Listens.total_played(year))
     |> assign(:top_artists, Artists.top(year))
     |> assign(:top_tracks, Tracks.top(year))
   end

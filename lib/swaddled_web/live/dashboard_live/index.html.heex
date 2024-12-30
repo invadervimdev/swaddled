@@ -32,6 +32,10 @@
   </h1>
 </div>
 
+<div class="mb-8 text-center text-2xl">
+  Total time played: {minutes(@total_time)}
+</div>
+
 <.live_component module={SwaddledWeb.CarouselComponent} id="top-carousel" total_cards={3}>
   <.card :if={@active_card == 0} image_src={~p"/images/top_artists.webp"} title="Top Artists">
     <ol class="list-decimal">

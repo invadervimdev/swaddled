@@ -103,6 +103,28 @@ defmodule Swaddled.Listens do
   end
 
   @doc """
+  Total time listening to music in given year (in ms).
+  """
+  @spec total_played(non_neg_integer()) :: non_neg_integer()
+  def total_played(year) do
+    import Ecto.Query
+
+    start_date = to_datetime(year)
+    end_date = to_datetime(year + 1)
+
+    query =
+      from l in Listen,
+        where: l.started_at >= ^start_date,
+        where: l.started_at < ^end_date,
+        select: sum(l.ms_played)
+
+    [ms] = Repo.all(query)
+    ms
+  end
+
+  defp to_datetime(year), do: year |> Date.new!(1, 1) |> DateTime.new!(~T[00:00:00])
+
+  @doc """
   Returns a list of years in which a listen was recorded. Note all dates are in
   UTC.
   """
