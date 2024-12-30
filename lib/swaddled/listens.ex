@@ -101,4 +101,19 @@ defmodule Swaddled.Listens do
   def change(%Listen{} = listen, attrs \\ %{}) do
     Listen.changeset(listen, attrs)
   end
+
+  @doc """
+  Returns a list of years in which a listen was recorded. Note all dates are in
+  UTC.
+  """
+  @spec years() :: list(integer())
+  def years do
+    query =
+      from l in Listen,
+        select: fragment("date_part('year', started_at)::INT"),
+        distinct: true,
+        order_by: [desc: fragment("date_part('year', started_at)::INT")]
+
+    Repo.all(query)
+  end
 end
