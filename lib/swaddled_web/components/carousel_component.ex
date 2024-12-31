@@ -12,7 +12,8 @@ defmodule SwaddledWeb.CarouselComponent do
     {:ok,
      socket
      |> assign(:active_card, 0)
-     |> start_async(:auto_slide, fn -> :timer.sleep(@slide_duration) end)}
+     |> assign(:auto_slide, true)
+     |> start_async(:next_slide, fn -> :timer.sleep(@slide_duration) end)}
   end
 
   @impl true
@@ -44,7 +45,7 @@ defmodule SwaddledWeb.CarouselComponent do
           <%= for i <- 0..(@total_cards - 1) do %>
             <div
               class={"w-[30px] h-[3px] cursor-pointer #{indicator_color(@active_card == i)}"}
-              phx-click="set_card"
+              phx-click="set-card"
               phx-target={@myself}
               phx-value-card={i}
             />
@@ -70,6 +71,46 @@ defmodule SwaddledWeb.CarouselComponent do
           </a>
         </div>
       </div>
+
+      <div class="flex justify-center">
+        <div class="cursor-pointer" phx-click="toggle-auto-slide" phx-target={@myself}>
+          <svg
+            :if={@auto_slide}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+          <svg
+            :if={!@auto_slide}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
     """
   end
@@ -79,9 +120,13 @@ defmodule SwaddledWeb.CarouselComponent do
   defp indicator_color(false), do: "bg-gray-400"
 
   @impl true
-  def handle_async(:auto_slide, {:ok, :ok}, socket) do
-    socket = start_async(socket, :auto_slide, fn -> :timer.sleep(@slide_duration) end)
-    handle_event("next", nil, socket)
+  def handle_async(:next_slide, {:ok, :ok}, socket) do
+    if socket.assigns.auto_slide do
+      socket = start_async(socket, :next_slide, fn -> :timer.sleep(@slide_duration) end)
+      handle_event("next", nil, socket)
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true
@@ -102,9 +147,20 @@ defmodule SwaddledWeb.CarouselComponent do
   end
 
   @impl true
-  def handle_event("set_card", %{"card" => card}, socket) do
+  def handle_event("set-card", %{"card" => card}, socket) do
     {card, _} = Integer.parse(card)
     update_active_card(card, socket)
+  end
+
+  @impl true
+  def handle_event("toggle-auto-slide", _, socket) do
+    socket = assign(socket, :auto_slide, !socket.assigns.auto_slide)
+
+    if socket.assigns.auto_slide do
+      handle_async(:next_slide, {:ok, :ok}, socket)
+    else
+      {:noreply, socket}
+    end
   end
 
   defp update_active_card(active_card, socket) do

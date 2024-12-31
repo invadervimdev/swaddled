@@ -18,7 +18,7 @@ defmodule SwaddledWeb.CarouselCardComponent do
         title={@title}
       >
       </div>
-      <div class="p-8 w-1/2 text-xl font-serif h-full border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r-[20px] p-4 flex flex-col justify-center leading-normal">
+      <div class="p-8 w-1/2 text-lg font-serif h-full border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r-[20px] p-4 flex flex-col justify-center leading-normal">
         {render_slot(@inner_block)}
       </div>
     </div>
