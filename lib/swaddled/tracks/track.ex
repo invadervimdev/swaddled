@@ -6,7 +6,7 @@ defmodule Swaddled.Tracks.Track do
   @foreign_key_type :binary_id
   schema "tracks" do
     field :name, :string
-    field :spotify_uri, :string
+    field :spotify_id, :string
 
     belongs_to :artist, Swaddled.Artists.Artist
   end
@@ -14,7 +14,7 @@ defmodule Swaddled.Tracks.Track do
   @doc false
   def changeset(track, attrs) do
     track
-    |> cast(attrs, [:spotify_uri, :name])
-    |> validate_required([:spotify_uri, :name])
+    |> cast(attrs, [:spotify_id, :name])
+    |> validate_required([:spotify_id, :name])
   end
 end

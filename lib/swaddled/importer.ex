@@ -106,20 +106,20 @@ defmodule Swaddled.Importer do
         &[
           artist_id: artists[&1["master_metadata_album_artist_name"]],
           name: &1["master_metadata_track_name"],
-          spotify_uri: &1["spotify_track_uri"]
+          spotify_id: &1["spotify_track_uri"] |> String.split(":") |> List.last()
         ]
       )
       |> Enum.uniq()
 
     Track
     |> Repo.insert_all(attrs,
-      returning: [:id, :artist_id, :name, :spotify_uri],
-      on_conflict: {:replace, [:artist_id, :name, :spotify_uri]},
-      conflict_target: [:artist_id, :name, :spotify_uri]
+      returning: [:id, :artist_id, :name, :spotify_id],
+      on_conflict: {:replace, [:artist_id, :name, :spotify_id]},
+      conflict_target: [:artist_id, :name, :spotify_id]
     )
     |> elem(1)
     |> Map.new(fn track ->
-      {{track.spotify_uri, track.name,
+      {{track.spotify_id, track.name,
         Enum.find_value(artists, fn {name, id} -> if(id == track.artist_id, do: name) end)},
        %{artist_id: track.artist_id, track_id: track.id}}
     end)
@@ -127,8 +127,10 @@ defmodule Swaddled.Importer do
 
   defp insert_listens(data, tracks) do
     track = fn item ->
+      spotify_id = item["spotify_track_uri"] |> String.split(":") |> List.last()
+
       tracks[
-        {item["spotify_track_uri"], item["master_metadata_track_name"],
+        {spotify_id, item["master_metadata_track_name"],
          item["master_metadata_album_artist_name"]}
       ]
     end
