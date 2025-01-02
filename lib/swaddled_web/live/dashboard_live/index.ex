@@ -4,6 +4,7 @@ defmodule SwaddledWeb.DashboardLive.Index do
   import SwaddledWeb.CarouselCardComponent
 
   alias Swaddled.Artists
+  alias Swaddled.Genres
   alias Swaddled.Listens
   alias Swaddled.Listens.Listen
   alias Swaddled.Repo
@@ -58,6 +59,7 @@ defmodule SwaddledWeb.DashboardLive.Index do
     |> assign(:total_time, Listens.total_played(year))
     |> assign(:top_artists, Artists.top(year))
     |> assign(:top_tracks, Tracks.top(year))
+    |> assign(:top_genres, Genres.top(year))
   end
 
   defp minutes(ms), do: "#{round(ms / 60_000)} min"

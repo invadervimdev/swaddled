@@ -1,6 +1,9 @@
 defmodule Swaddled.Genres do
   @moduledoc """
-  The Genres context.
+  Genres are poorly designed in Spotify. Instead of being associated to a track,
+  the genres are just an array on the artist. Since there's not an easy way to
+  easily identify which tracks are which genres, this simply links all genres to
+  a listen.
   """
 
   import Ecto.Query, warn: false
@@ -100,5 +103,21 @@ defmodule Swaddled.Genres do
   """
   def change(%Genre{} = genre, attrs \\ %{}) do
     Genre.changeset(genre, attrs)
+  end
+
+  @doc """
+  Shows the top 5 genres by total listening time.
+  """
+  @spec top(non_neg_integer()) :: list(%{name: String.t(), ms: non_neg_integer()})
+  def top(year) do
+    query =
+      from l in Swaddled.Listens.by_year(year),
+        join: g in assoc(l, :genres),
+        group_by: g.name,
+        order_by: [desc: sum(l.ms_played)],
+        select: %{name: g.name, ms: sum(l.ms_played)},
+        limit: 5
+
+    Repo.all(query)
   end
 end

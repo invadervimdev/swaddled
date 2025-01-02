@@ -10,6 +10,8 @@ defmodule Swaddled.Listens.Listen do
 
     belongs_to :artist, Swaddled.Artists.Artist
     belongs_to :track, Swaddled.Tracks.Track
+
+    has_many :genres, through: [:artist, :genres]
   end
 
   @doc false

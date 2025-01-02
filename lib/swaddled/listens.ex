@@ -122,8 +122,6 @@ defmodule Swaddled.Listens do
     ms
   end
 
-  defp to_datetime(year), do: year |> Date.new!(1, 1) |> DateTime.new!(~T[00:00:00])
-
   @doc """
   Returns a list of years in which a listen was recorded. Note all dates are in
   UTC.
@@ -138,4 +136,21 @@ defmodule Swaddled.Listens do
 
     Repo.all(query)
   end
+
+  @doc """
+  Helper function that returns a query to get all listens for a year.
+  """
+  @spec by_year(non_neg_integer()) :: any()
+  def by_year(year) do
+    import Ecto.Query
+
+    start_date = to_datetime(year)
+    end_date = to_datetime(year + 1)
+
+    from l in Listen,
+      where: l.started_at >= ^start_date,
+      where: l.started_at < ^end_date
+  end
+
+  defp to_datetime(year), do: year |> Date.new!(1, 1) |> DateTime.new!(~T[00:00:00])
 end

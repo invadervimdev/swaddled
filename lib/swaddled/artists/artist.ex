@@ -10,6 +10,7 @@ defmodule Swaddled.Artists.Artist do
     field :name, :string
     field :spotify_id, :string
 
+    has_many :listens, Swaddled.Listens.Listen
     has_many :tracks, Swaddled.Tracks.Track
     many_to_many :genres, Genre, join_through: "artists_genres"
   end

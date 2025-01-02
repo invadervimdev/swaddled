@@ -54,6 +54,10 @@
   </.card>
 
   <.card :if={@active_card == 2} image_src={~p"/images/top_genres.webp"} title="Top Genres">
-    Coming soon!
+    <ol class="list-decimal">
+      <%= for genre <- @top_genres  do %>
+        <li class="py-2">{genre.name} ({minutes(genre.ms)})</li>
+      <% end %>
+    </ol>
   </.card>
 </.live_component>
