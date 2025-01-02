@@ -7,6 +7,8 @@ defmodule Swaddled.Repo.Migrations.CreateGenres do
       add :name, :string
     end
 
+    create unique_index(:genres, [:name])
+
     create table(:artists_genres, primary_key: false) do
       add :artist_id, references(:artists, on_delete: :nothing, type: :binary_id),
         null: false,

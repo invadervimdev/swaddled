@@ -22,7 +22,7 @@ defmodule SwaddledWeb.ImportLive.IndexTest do
           }
         ])
 
-      assert render_upload(history, name) =~ "Loading data..."
+      assert render_upload(history, name) =~ "Loading 0 listens..."
       assert render_async(index_live) =~ "Imported 14 listens."
     end
   end

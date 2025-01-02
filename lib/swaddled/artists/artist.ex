@@ -10,6 +10,7 @@ defmodule Swaddled.Artists.Artist do
     field :name, :string
     field :spotify_id, :string
 
+    has_many :tracks, Swaddled.Tracks.Track
     many_to_many :genres, Genre, join_through: "artists_genres"
   end
 
@@ -17,7 +18,6 @@ defmodule Swaddled.Artists.Artist do
   def changeset(artist, attrs) do
     artist
     |> cast(attrs, [:name, :spotify_id])
-    |> cast_assoc(:genres, with: &Genre.changeset/2)
     |> validate_required([:name])
   end
 end

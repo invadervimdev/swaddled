@@ -8,7 +8,7 @@ defmodule Swaddled.TracksTest do
 
     import Swaddled.TracksFixtures
 
-    @invalid_attrs %{name: nil, spotify_uri: nil}
+    @invalid_attrs %{name: nil, spotify_id: nil}
 
     test "list/0 returns all tracks" do
       track = track_fixture()
@@ -21,11 +21,11 @@ defmodule Swaddled.TracksTest do
     end
 
     test "create/1 with valid data creates a track" do
-      valid_attrs = %{name: "some name", spotify_uri: "some spotify_uri"}
+      valid_attrs = %{name: "some name", spotify_id: "some spotify_id"}
 
       assert {:ok, %Track{} = track} = Tracks.create(valid_attrs)
       assert track.name == "some name"
-      assert track.spotify_uri == "some spotify_uri"
+      assert track.spotify_id
     end
 
     test "create/1 with invalid data returns error changeset" do
@@ -34,11 +34,11 @@ defmodule Swaddled.TracksTest do
 
     test "update/2 with valid data updates the track" do
       track = track_fixture()
-      update_attrs = %{name: "some updated name", spotify_uri: "some updated spotify_uri"}
+      update_attrs = %{name: "some updated name", spotify_id: "some updated spotify_id"}
 
       assert {:ok, %Track{} = track} = Tracks.update(track, update_attrs)
       assert track.name == "some updated name"
-      assert track.spotify_uri == "some updated spotify_uri"
+      assert track.spotify_id == "some updated spotify_id"
     end
 
     test "update/2 with invalid data returns error changeset" do

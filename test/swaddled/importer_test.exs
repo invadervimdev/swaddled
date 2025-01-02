@@ -18,9 +18,25 @@ defmodule Swaddled.ImporterTest do
     end
   end
 
+  describe "load_genres/0" do
+    setup %{zip_file: file} do
+      {:ok, _} = Importer.load(file)
+      :ok
+    end
+
+    @tag :external
+    test "successfully loads genre data" do
+      assert [] == Swaddled.Genres.list()
+      assert {:ok, genres_count} = Importer.load_genres()
+
+      genres = Swaddled.Genres.list()
+      assert Enum.count(genres) == genres_count
+    end
+  end
+
   describe "upload/1" do
     test "successfully uploads data", %{zip_file: file} do
-      assert {:ok, %{listens: listens_count}} = Importer.upload(file)
+      assert {:ok, %{total_listens: listens_count}} = Importer.upload(file)
       assert Swaddled.Listens.list() |> Enum.count() == listens_count
     end
   end

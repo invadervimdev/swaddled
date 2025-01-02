@@ -11,7 +11,7 @@ defmodule Swaddled.ArtistsTest do
     @invalid_attrs %{name: nil}
 
     test "list/0 returns all artists" do
-      artist = artist_fixture()
+      artist = artist_fixture() |> Map.put(:genres, [])
       assert Artists.list() == [artist]
     end
 

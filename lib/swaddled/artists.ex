@@ -20,7 +20,9 @@ defmodule Swaddled.Artists do
 
   """
   def list do
-    Repo.all(Artist)
+    Artist
+    |> preload(:genres)
+    |> Repo.all()
   end
 
   @doc """
@@ -128,4 +130,23 @@ defmodule Swaddled.Artists do
   end
 
   defp to_datetime(year), do: year |> Date.new!(1, 1) |> DateTime.new!(~T[00:00:00])
+
+  @doc """
+  Specfiically used to grab artists/tracks to feed into the Spotify Web API.
+  The relevant endpoints only allows 50 ids at a time, which is why the limit is
+  set.
+  """
+  @spec with_track_ids(non_neg_integer()) :: list({%Artist{}, String.t()})
+  def with_track_ids(offset) do
+    from(a in Artist,
+      join: t in assoc(a, :tracks),
+      select: {a, max(t.spotify_id)},
+      group_by: [a.id],
+      preload: [:genres],
+      order_by: [:id],
+      limit: 50,
+      offset: ^(offset * 50)
+    )
+    |> Repo.all()
+  end
 end

@@ -12,7 +12,7 @@ defmodule Swaddled.TracksFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        spotify_uri: "some spotify_uri"
+        spotify_id: Ecto.UUID.generate()
       })
       |> Swaddled.Tracks.create()
 
