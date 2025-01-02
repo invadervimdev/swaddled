@@ -22,7 +22,20 @@ defmodule SwaddledWeb.CarouselComponent do
     <div id={@id}>
       {render_slot(@inner_block)}
 
-      <div class="grid grid-cols-3">
+      <div class="flex justify-center h-8">
+        <div class="flex items-center justify-center gap-3">
+          <%= for i <- 0..(@total_cards - 1) do %>
+            <div
+              class={"w-[30px] h-[3px] cursor-pointer #{indicator_color(@active_card == i)}"}
+              phx-click="set-card"
+              phx-target={@myself}
+              phx-value-card={i}
+            />
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
         <div>
           <a href="#" phx-click="previous" phx-target={@myself}>
             <svg
@@ -41,39 +54,7 @@ defmodule SwaddledWeb.CarouselComponent do
             </svg>
           </a>
         </div>
-        <div class="flex items-center justify-center gap-3">
-          <%= for i <- 0..(@total_cards - 1) do %>
-            <div
-              class={"w-[30px] h-[3px] cursor-pointer #{indicator_color(@active_card == i)}"}
-              phx-click="set-card"
-              phx-target={@myself}
-              phx-value-card={i}
-            />
-          <% end %>
-        </div>
-
-        <div>
-          <a href="#" class="float-right" phx-click="next" phx-target={@myself}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="flex justify-center">
-        <div class="cursor-pointer" phx-click="toggle-auto-slide" phx-target={@myself}>
+        <div class="mx-4 cursor-pointer" phx-click="toggle-auto-slide" phx-target={@myself}>
           <svg
             :if={@auto_slide}
             xmlns="http://www.w3.org/2000/svg"
@@ -109,6 +90,24 @@ defmodule SwaddledWeb.CarouselComponent do
               d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
             />
           </svg>
+        </div>
+        <div>
+          <a href="#" class="float-right" phx-click="next" phx-target={@myself}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </div>
