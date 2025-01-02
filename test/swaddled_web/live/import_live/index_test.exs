@@ -4,7 +4,7 @@ defmodule SwaddledWeb.ImportLive.IndexTest do
   import Phoenix.LiveViewTest
   import Swaddled.ImporterFixtures
 
-  describe "dashboard index" do
+  describe "import index" do
     test "successfully uploads and imports a zip file", %{conn: conn} do
       # We should redirect to `/import` when there are no listens
       assert {:ok, index_live, html} = live(conn, ~p"/import")

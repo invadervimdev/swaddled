@@ -19,6 +19,7 @@ defmodule SwaddledWeb.Router do
 
     live "/", DashboardLive.Index
     live "/import", ImportLive.Index
+    live "/import/genres", ImportLive.Genres
   end
 
   # Other scopes may use custom stacks.

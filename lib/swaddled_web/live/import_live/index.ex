@@ -12,6 +12,7 @@ defmodule SwaddledWeb.ImportLive.Index do
     {:ok,
      socket
      |> assign(:show_form, true)
+     |> assign(:listens_imported, 0)
      |> assign(:uploaded_files, [])
      |> allow_upload(:streaming_history,
        accept: ~w(.zip),
@@ -27,8 +28,17 @@ defmodule SwaddledWeb.ImportLive.Index do
     {:noreply, socket}
   end
 
+  @impl Phoenix.LiveView
+  def handle_info({:import_listens, count}, socket) do
+    {:noreply, assign(socket, :listens_imported, socket.assigns.listens_imported + count)}
+  end
+
+  def topic, do: "import_listens"
+
   defp handle_progress(:streaming_history, entry, socket) do
     if entry.done? do
+      :ok = Phoenix.PubSub.subscribe(Swaddled.PubSub, topic())
+
       {:noreply,
        consume_uploaded_entry(socket, entry, fn %{path: path} ->
          file = File.read!(path)
@@ -36,7 +46,7 @@ defmodule SwaddledWeb.ImportLive.Index do
          {:ok,
           socket
           |> assign(:show_form, false)
-          |> assign_async(:listens, fn -> Swaddled.Importer.upload(file) end)}
+          |> assign_async(:total_listens, fn -> Swaddled.Importer.upload(file) end)}
        end)}
     else
       {:noreply, socket}

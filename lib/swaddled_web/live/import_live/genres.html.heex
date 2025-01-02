@@ -1,0 +1,131 @@
+<div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+  <span class="mb-6 text-2xl font-semibold text-gray-900">
+    Import Genres
+  </span>
+
+  <div class="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md border">
+    <.async_result :let={total_genres} :if={assigns[:total_genres]} assign={@total_genres}>
+      <:loading>
+        <div class="text-center">
+          <div role="status" class="items-center">
+            <svg
+              aria-hidden="true"
+              class="inline w-10 h-10 text-gray-200 animate-spin fill-green-600"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="currentColor"
+              />
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentFill"
+              />
+            </svg>
+            <p class="mt-4">Loading {@genres_imported} genres...</p>
+          </div>
+        </div>
+      </:loading>
+
+      <:failed :let={{:error, failure_msg}}>
+        <div class="mb-4 text-center text-red-600">
+          There was an error importing the data: {failure_msg}
+        </div>
+      </:failed>
+
+      <span>
+        Imported {total_genres - @preimport_total} new genres ({total_genres} total).
+        <.link patch={~p"/"} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+          See your Swaddle now!
+        </.link>
+      </span>
+    </.async_result>
+
+    <div :if={!assigns[:total_genres]}>
+      <div class="mb-8">
+        <div class="p-2 rounded-t-lg border" phx-click="toggle-credentials-form">
+          Spotify Credentials
+          <span class="float-right">
+            <%= if @show_credentials_form do %>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            <% else %>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            <% end %>
+          </span>
+        </div>
+        <div :if={@show_credentials_form} class="p-2 rounded-b-lg border border-t-0">
+          <div class="mb-4 text-center text-red-600">{@form_error}</div>
+          <form id="credentials-form" phx-submit="save" class="max-w-sm mx-auto">
+            <div class="flex items-center justify-center w-full">
+              <label>
+                Client ID:
+                <.input
+                  type="text"
+                  name="credentials[client_id]"
+                  value={System.get_env("SPOTIFY_CLIENT_ID")}
+                />
+              </label>
+              <label>
+                Client Secret:
+                <.input
+                  type="text"
+                  name="credentials[client_secret]"
+                  value={System.get_env("SPOTIFY_CLIENT_SECRET")}
+                />
+              </label>
+            </div>
+            <div class="text-center">
+              <button
+                type="submit"
+                class="mt-4 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <div class="mb-4 text-center text-red-600">{@import_error}</div>
+        This will call the Spotify Web API to load the genres. Make sure to set your Spotify credentials above before starting!
+        <div class="mt-4 text-center">
+          <button
+            phx-click="start"
+            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          >
+            Start!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

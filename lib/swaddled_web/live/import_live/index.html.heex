@@ -7,7 +7,7 @@
     class="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md border"
     phx-drop-target={@uploads.streaming_history.ref}
   >
-    <.async_result :let={listens} :if={assigns[:listens]} assign={@listens}>
+    <.async_result :let={total_listens} :if={assigns[:total_listens]} assign={@total_listens}>
       <:loading>
         <div class="text-center">
           <div role="status" class="items-center">
@@ -27,7 +27,7 @@
                 fill="currentFill"
               />
             </svg>
-            <p class="mt-4">Loading data...</p>
+            <p class="mt-4">Loading {@listens_imported} listens...</p>
           </div>
         </div>
       </:loading>
@@ -35,10 +35,24 @@
       <:failed :let={_failure}>There was an error importing the data</:failed>
 
       <span>
-        Imported {listens} listens.
-        <.link patch={~p"/"} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-          See your Swaddle now!
-        </.link>
+        <p>Imported {total_listens} listens.</p>
+
+        <p>
+          You can
+          <.link
+            patch={~p"/import/genres"}
+            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >
+            import genres
+          </.link>
+          or
+          <.link
+            patch={~p"/"}
+            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >
+            see your Swaddle now!
+          </.link>
+        </p>
       </span>
     </.async_result>
 
