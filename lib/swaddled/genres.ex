@@ -108,16 +108,13 @@ defmodule Swaddled.Genres do
   @doc """
   Shows the top 5 genres by total listening time.
   """
-  @spec top(non_neg_integer()) :: list(%{name: String.t(), ms: non_neg_integer()})
-  def top(year) do
-    query =
-      from l in Swaddled.Listens.by_year(year),
-        join: g in assoc(l, :genres),
-        group_by: g.name,
-        order_by: [desc: sum(l.ms_played)],
-        select: %{name: g.name, ms: sum(l.ms_played)},
-        limit: 5
-
-    Repo.all(query)
+  @spec top(non_neg_integer(), atom()) :: list(%{name: String.t(), ms: non_neg_integer()})
+  def top(year, type) do
+    from(l in Swaddled.Listens.by_year(year, type),
+      join: g in assoc(l, :genres),
+      group_by: g.name,
+      select_merge: %{name: g.name}
+    )
+    |> Repo.all()
   end
 end

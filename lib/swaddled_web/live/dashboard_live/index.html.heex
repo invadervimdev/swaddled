@@ -36,27 +36,99 @@
   Total time played: {minutes(@total_time)}
 </div>
 
-<.live_component module={SwaddledWeb.CarouselComponent} id="top-carousel" total_cards={3}>
-  <.card :if={@active_card == 0} image_src={~p"/images/top_artists.webp"} title="Top Artists">
+<.live_component module={SwaddledWeb.CarouselComponent} id="top-carousel" total_cards={6}>
+  <.card
+    :if={@active_card == 0}
+    image_src={~p"/images/top_artists.webp"}
+    title="Top artists by minutes"
+  >
+    BY MINUTES PLAYED
     <ol class="list-decimal">
-      <%= for artist <- @top_artists  do %>
-        <li class="py-2">{artist.name} ({minutes(artist.ms)})</li>
+      <%= for artist <- @top_artists_time  do %>
+        <li class="py-2">
+          {artist.name}<br />
+          {minutes(artist.ms)} - {artist.count} listens
+        </li>
       <% end %>
     </ol>
   </.card>
 
-  <.card :if={@active_card == 1} image_src={~p"/images/top_tracks.webp"} title="Top Tracks">
+  <.card
+    :if={@active_card == 1}
+    image_src={~p"/images/top_artists.webp"}
+    title="Top artists by count"
+  >
+    BY NUMBER OF LISTENS
     <ol class="list-decimal">
-      <%= for track <- @top_tracks  do %>
-        <li class="py-2">{track.name} by {track.artist} ({minutes(track.ms)})</li>
+      <%= for artist <- @top_artists_count do %>
+        <li class="py-2">
+          {artist.name}<br />
+          {artist.count} listens - {minutes(artist.ms)}
+        </li>
       <% end %>
     </ol>
   </.card>
 
-  <.card :if={@active_card == 2} image_src={~p"/images/top_genres.webp"} title="Top Genres">
+  <.card
+    :if={@active_card == 2}
+    image_src={~p"/images/top_tracks.webp"}
+    title="Top tracks by minutes"
+  >
+    BY MINUTES PLAYED
     <ol class="list-decimal">
-      <%= for genre <- @top_genres  do %>
-        <li class="py-2">{genre.name} ({minutes(genre.ms)})</li>
+      <%= for track <- @top_tracks_time  do %>
+        <li class="py-2">
+          {track.name} - {track.artist}<br />
+          {minutes(track.ms)} - {track.count} listens
+        </li>
+      <% end %>
+    </ol>
+  </.card>
+
+  <.card
+    :if={@active_card == 3}
+    image_src={~p"/images/top_tracks.webp"}
+    title="Top tracks by count"
+  >
+    BY NUMBER OF LISTENS
+    <ol class="list-decimal">
+      <%= for track <- @top_tracks_count do %>
+        <li class="py-2">
+          {track.name} - {track.artist}<br />
+          {track.count} listens - {minutes(track.ms)}
+        </li>
+      <% end %>
+    </ol>
+  </.card>
+
+  <.card
+    :if={@active_card == 4}
+    image_src={~p"/images/top_genres.webp"}
+    title="Top genres by minutes"
+  >
+    BY MINUTES PLAYED
+    <ol class="list-decimal">
+      <%= for genre <- @top_genres_time  do %>
+        <li class="py-2">
+          {genre.name}<br />
+          {minutes(genre.ms)} - {genre.count} listens
+        </li>
+      <% end %>
+    </ol>
+  </.card>
+
+  <.card
+    :if={@active_card == 5}
+    image_src={~p"/images/top_genres.webp"}
+    title="Top genres by count"
+  >
+    BY NUMBER OF LISTENS
+    <ol class="list-decimal">
+      <%= for genre <- @top_genres_count do %>
+        <li class="py-2">
+          {genre.name}<br />
+          {genre.count} listens - {minutes(genre.ms)}
+        </li>
       <% end %>
     </ol>
   </.card>

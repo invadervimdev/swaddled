@@ -140,16 +140,25 @@ defmodule Swaddled.Listens do
   @doc """
   Helper function that returns a query to get all listens for a year.
   """
-  @spec by_year(non_neg_integer()) :: any()
-  def by_year(year) do
+  @spec by_year(non_neg_integer(), atom()) :: any()
+  def by_year(year, type \\ :time) do
     import Ecto.Query
 
     start_date = to_datetime(year)
     end_date = to_datetime(year + 1)
 
+    order_by =
+      case type do
+        :count -> dynamic([l], count(l.id))
+        :time -> dynamic([l], sum(l.ms_played))
+      end
+
     from l in Listen,
+      select: %{count: count(l.id), ms: sum(l.ms_played)},
       where: l.started_at >= ^start_date,
-      where: l.started_at < ^end_date
+      where: l.started_at < ^end_date,
+      order_by: ^[desc: order_by],
+      limit: 5
   end
 
   defp to_datetime(year), do: year |> Date.new!(1, 1) |> DateTime.new!(~T[00:00:00])

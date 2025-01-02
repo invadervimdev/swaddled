@@ -109,17 +109,14 @@ defmodule Swaddled.Artists do
   @doc """
   Shows the top 5 artists by total listening time.
   """
-  @spec top(non_neg_integer()) :: list(%Artist{})
-  def top(year) do
-    query =
-      from l in Swaddled.Listens.by_year(year),
-        join: a in assoc(l, :artist),
-        group_by: a.name,
-        order_by: [desc: sum(l.ms_played)],
-        select: %{name: a.name, ms: sum(l.ms_played)},
-        limit: 5
-
-    Repo.all(query)
+  @spec top(non_neg_integer(), atom()) :: list(%Artist{})
+  def top(year, type) do
+    from(l in Swaddled.Listens.by_year(year, type),
+      join: a in assoc(l, :artist),
+      group_by: a.name,
+      select_merge: %{name: a.name}
+    )
+    |> Repo.all()
   end
 
   @doc """
