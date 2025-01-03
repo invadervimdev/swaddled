@@ -1,7 +1,7 @@
 defmodule SwaddledWeb.DashboardLive.Index do
   use SwaddledWeb, :live_view
 
-  import SwaddledWeb.CarouselCardComponent
+  import SwaddledWeb.CarouselComponent
 
   alias Swaddled.Artists
   alias Swaddled.Genres
@@ -23,7 +23,6 @@ defmodule SwaddledWeb.DashboardLive.Index do
 
       {:noreply,
        socket
-       |> assign(:active_card, 0)
        |> assign(:year, hd(years))
        |> assign(:years, years)
        |> assign(:show_years_dropdown, false)
@@ -47,11 +46,6 @@ defmodule SwaddledWeb.DashboardLive.Index do
   @impl true
   def handle_event("toggle-years-dropdown", _, socket) do
     {:noreply, assign(socket, :show_years_dropdown, !socket.assigns.show_years_dropdown)}
-  end
-
-  @impl true
-  def handle_info({:active_card, id}, socket) do
-    {:noreply, assign(socket, :active_card, id)}
   end
 
   defp update_metrics(%{assigns: %{year: year}} = socket) do

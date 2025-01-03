@@ -12,9 +12,42 @@ defmodule SwaddledWeb.DashboardLive.IndexTest do
 
     test "shows the dashboard", %{conn: conn} do
       assert {:ok, _} = seed_data()
-      assert {:ok, _index_live, html} = live(conn, ~p"/")
+      assert {:ok, index_live, html} = live(conn, ~p"/")
       assert html =~ "Total time played: 19 min"
-      assert html =~ "Nora En Pure (12 min)"
+      assert html =~ "BY TIME PLAYED"
+      assert html =~ "Weezer"
+
+      # Testing controls
+      assert index_live
+             |> element("#top-carousel-next")
+             |> render_click() =~ "BY PLAY COUNT"
+
+      # Testing indicators
+      html =
+        index_live
+        |> element("#top-carousel-indicator-2")
+        |> render_click()
+
+      assert html =~ "BY TIME PLAYED"
+      refute html =~ "BY PLAY COUNT"
+      refute html =~ "Weezer"
+      assert html =~ "All I Need - Nora En Pure"
+
+      # Testing play/pause
+
+      assert index_live
+             |> element("#top-carousel-indicator-2.bg-green-400")
+             |> has_element?()
+
+      refute index_live
+             |> element("#top-carousel-indicator-3.bg-green-400")
+             |> has_element?()
+
+      :timer.sleep(10)
+
+      assert index_live
+             |> element("#top-carousel-indicator-3.bg-green-400")
+             |> has_element?()
     end
   end
 end

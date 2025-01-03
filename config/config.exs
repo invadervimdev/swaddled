@@ -9,6 +9,7 @@ import Config
 
 config :swaddled,
   ecto_repos: [Swaddled.Repo],
+  env: config_env(),
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 # Configures the endpoint
