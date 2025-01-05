@@ -4,6 +4,10 @@ Missed out on your Spotify Wrapped? Or want to see your top artists and songs
 for the entire year? What about compared to previous years? Do it all with
 Swaddled!
 
+<p align="center">
+ <img src="https://github.com/user-attachments/assets/e524c8d0-a597-431e-a307-659d5191fee4" />
+</p>
+
 ## Why Swaddled?
 
 This is a project born out of hate. Let's be honest: Spotify's 2024 Wrapped
