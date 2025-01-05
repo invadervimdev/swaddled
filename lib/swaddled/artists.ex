@@ -1,8 +1,11 @@
 defmodule Swaddled.Artists do
   @moduledoc """
-  An artist is the creator or performer of a track. Each track is linked to only
-  one artist, so even though a song may be a duet, the data shows it's only tied
-  to one artist.
+  An artist is the creator or performer of a track.
+
+  With the extended streaming history data, each track is linked to only one
+  artist, so even though a song may be a duet, the data shows it's only tied
+  to one artist. Using the Spotify Web API, it is possible to get all artists
+  for a track, but was out of scope for this initial phase.
   """
 
   import Ecto.Query, warn: false

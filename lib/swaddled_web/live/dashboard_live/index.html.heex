@@ -60,13 +60,22 @@
   </:cards>
 
   <:cards title="Top Genres" image_src={~p"/images/top_genres.webp"}>
-    <ol class="list-decimal">
-      <%= for genre <- @top_genres_count  do %>
-        <li class="py-2">
-          {genre.name}<br />
-          {genre.count} listens - {minutes(genre.ms)}
-        </li>
-      <% end %>
-    </ol>
+    <%= if Enum.empty?(@top_genres_count) do %>
+      <div class="p-4 pt-0 xl:p-8 xl:pt-0">
+        No genre information. If you have your Spotify API client credentials, you can <.link
+          patch={~p"/import/genres"}
+          class="text-blue-600 dark:text-blue-500 hover:underline"
+        >import them here</.link>.
+      </div>
+    <% else %>
+      <ol class="list-decimal">
+        <%= for genre <- @top_genres_count  do %>
+          <li class="py-2">
+            {genre.name}<br />
+            {genre.count} listens - {minutes(genre.ms)}
+          </li>
+        <% end %>
+      </ol>
+    <% end %>
   </:cards>
 </.carousel>

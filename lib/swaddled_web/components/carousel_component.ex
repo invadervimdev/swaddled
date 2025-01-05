@@ -1,7 +1,27 @@
 defmodule SwaddledWeb.CarouselComponent do
   @moduledoc """
-  A regular component to manage the Live Carousel.
+  A pure Liveview/Tailwind solution for a carousel.
+
+  This details of this carousel are specfically geared towards showing the
+  Swaddled. To make this more generic, can make the `.carousel` component
+  accept more options, such as setting the `slide_duration`, hide/show the
+  indicators or controls, etc. Should also allow each card to have it's own
+  look, too.
+
+  ## Configuration
+
+  - Add as many `:cards` elements as you'd like, but only tested with up to 6.
+  - Change how long a slide is shown by updating `@default_slide_duration`.
+
+  ## Usage
+
+  <.carousel id="my-carousel">
+    <:cards title="Card Title" image_src={~p"/images/path_to_image.jpg"}>
+      Content of card goes here!
+    </:cards>
+  </.carousel>
   """
+
   use SwaddledWeb, :live_component
 
   @default_slide_duration 10_000

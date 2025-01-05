@@ -1,6 +1,19 @@
 defmodule Swaddled.Listens do
   @moduledoc """
-  Represents when the user played back a track.
+  Represents when the user played a track.
+
+  There are two things to note that skew the listening time:
+
+  1. This app does not use time zones, so all your data will be as if you live
+     in London (if you listened to all your music in London, perfect!).
+
+  2. Your time listened only counts for the day the track started playing. For
+     example, if the track is 1 hour long and was started on December 31, 2024
+     at 11:59pm, the full hour will be considered listened to in 2024.
+
+     One could make a case that only 1 minute should count towards 2024 and the
+     rest of the time should be counted in 2025, but I didn't think the work was
+     worth it for this initial phase.
   """
 
   import Ecto.Query, warn: false
