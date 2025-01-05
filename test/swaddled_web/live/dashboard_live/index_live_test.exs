@@ -13,40 +13,32 @@ defmodule SwaddledWeb.DashboardLive.IndexTest do
     test "shows the dashboard", %{conn: conn} do
       assert {:ok, _} = seed_data()
       assert {:ok, index_live, html} = live(conn, ~p"/")
-      assert html =~ "Total time played: 19 min"
-      assert html =~ "BY TIME PLAYED"
-      assert html =~ "Weezer"
+      assert html =~ "This year, you listened to 14 songs for a total of 19 minutes!"
+      assert html =~ "Top Artists"
 
       # Testing controls
       assert index_live
              |> element("#top-carousel-next")
-             |> render_click() =~ "BY PLAY COUNT"
+             |> render_click() =~ "Top Tracks"
 
       # Testing indicators
-      html =
-        index_live
-        |> element("#top-carousel-indicator-2")
-        |> render_click()
-
-      assert html =~ "BY TIME PLAYED"
-      refute html =~ "BY PLAY COUNT"
-      refute html =~ "Weezer"
-      assert html =~ "All I Need - Nora En Pure"
+      assert index_live
+             |> element("#top-carousel-indicator-2")
+             |> render_click() =~ "Top Genres"
 
       # Testing play/pause
-
       assert index_live
              |> element("#top-carousel-indicator-2.bg-green-400")
              |> has_element?()
 
       refute index_live
-             |> element("#top-carousel-indicator-3.bg-green-400")
+             |> element("#top-carousel-indicator-0.bg-green-400")
              |> has_element?()
 
       :timer.sleep(10)
 
       assert index_live
-             |> element("#top-carousel-indicator-3.bg-green-400")
+             |> element("#top-carousel-indicator-0.bg-green-400")
              |> has_element?()
     end
   end

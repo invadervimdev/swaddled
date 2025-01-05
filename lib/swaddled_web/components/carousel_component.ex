@@ -4,7 +4,7 @@ defmodule SwaddledWeb.CarouselComponent do
   """
   use SwaddledWeb, :live_component
 
-  @default_slide_duration 4_000
+  @default_slide_duration 10_000
 
   @impl true
   @spec mount(map()) :: {:ok, map()}
@@ -19,7 +19,7 @@ defmodule SwaddledWeb.CarouselComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id={@id}>
+    <div id={@id} class="grid grid-cols-1 justify-items-center">
       <%= for {card, i} <- Enum.with_index(@cards) do %>
         <.card
           active_card={@active_card}
@@ -111,17 +111,15 @@ defmodule SwaddledWeb.CarouselComponent do
 
   defp card(assigns) do
     ~H"""
-    <div
-      :if={@active_card == @current_card}
-      class="max-w-sm w-full lg:max-w-full lg:flex h-56 lg:h-96"
-    >
+    <div :if={@active_card == @current_card} class="w-4/5 aspect-[16/7] min-w-[512px] min-h-56 flex">
       <div
-        class="h-48 lg:h-auto w-1/2 flex-none bg-cover rounded-l-[20px] text-center overflow-hidden bg-center"
+        class="w-1/2 h-full flex-none bg-cover rounded-l lg:rounded-l-[20px] text-center overflow-hidden bg-center"
         style={"background-image: url('#{@image_src}')"}
         title={@title}
       >
       </div>
-      <div class="p-8 w-1/2 text-lg font-serif h-full border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r-[20px] p-4 flex flex-col justify-center leading-normal">
+      <div class="p-2 w-1/2 items-center xs:text-xs sm:text-sm lg:text-md xl:text-2xl font-sans h-full border-r border-b border-l border-t border-gray-400 bg-white rounded-r lg:rounded-r-[20px] flex flex-col overflow-scroll">
+        <h1 class="mb-4 font-bold">{@title}</h1>
         {render_slot(@inner_block)}
       </div>
     </div>
@@ -138,7 +136,7 @@ defmodule SwaddledWeb.CarouselComponent do
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="size-6"
+          class="size-8"
         >
           <path
             stroke-linecap="round"
@@ -160,7 +158,7 @@ defmodule SwaddledWeb.CarouselComponent do
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="size-6"
+          class="size-8"
         >
           <path
             stroke-linecap="round"
@@ -175,7 +173,7 @@ defmodule SwaddledWeb.CarouselComponent do
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="size-6"
+          class="size-8"
         >
           <path
             stroke-linecap="round"
@@ -196,7 +194,7 @@ defmodule SwaddledWeb.CarouselComponent do
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="size-6"
+          class="size-8"
         >
           <path
             stroke-linecap="round"

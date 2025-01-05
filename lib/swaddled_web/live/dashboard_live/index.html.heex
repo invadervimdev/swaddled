@@ -33,23 +33,11 @@
 </div>
 
 <div class="mb-8 text-center text-2xl">
-  Total time played: {minutes(@total_time)}
+  This year, you listened to {@total_count} songs for a total of {minutes(@total_time)}utes!
 </div>
 
 <.carousel id="top-carousel">
-  <:cards title="Top artists by time played" image_src={~p"/images/top_artists.webp"}>
-    BY TIME PLAYED
-    <ol class="list-decimal">
-      <%= for artist <- @top_artists_time  do %>
-        <li class="py-2">
-          {artist.name}<br />
-          {minutes(artist.ms)} - {artist.count} listens
-        </li>
-      <% end %>
-    </ol>
-  </:cards>
-  <:cards title="Top artists by play count" image_src={~p"/images/top_artists.webp"}>
-    BY PLAY COUNT
+  <:cards title="Top Artists" image_src={~p"/images/top_artists.webp"}>
     <ol class="list-decimal">
       <%= for artist <- @top_artists_count  do %>
         <li class="py-2">
@@ -60,19 +48,7 @@
     </ol>
   </:cards>
 
-  <:cards title="Top tracks by time played" image_src={~p"/images/top_tracks.webp"}>
-    BY TIME PLAYED
-    <ol class="list-decimal">
-      <%= for track <- @top_tracks_time  do %>
-        <li class="py-2">
-          {track.name} - {track.artist}<br />
-          {minutes(track.ms)} - {track.count} listens
-        </li>
-      <% end %>
-    </ol>
-  </:cards>
-  <:cards title="Top tracks by play count" image_src={~p"/images/top_tracks.webp"}>
-    BY PLAY COUNT
+  <:cards title="Top Tracks" image_src={~p"/images/top_tracks.webp"}>
     <ol class="list-decimal">
       <%= for track <- @top_tracks_count  do %>
         <li class="py-2">
@@ -83,19 +59,7 @@
     </ol>
   </:cards>
 
-  <:cards title="Top genres by time played" image_src={~p"/images/top_genres.webp"}>
-    BY TIME PLAYED
-    <ol class="list-decimal">
-      <%= for genre <- @top_genres_time  do %>
-        <li class="py-2">
-          {genre.name}<br />
-          {minutes(genre.ms)} - {genre.count} listens
-        </li>
-      <% end %>
-    </ol>
-  </:cards>
-  <:cards title="Top genres by play count" image_src={~p"/images/top_genres.webp"}>
-    BY PLAY COUNT
+  <:cards title="Top Genres" image_src={~p"/images/top_genres.webp"}>
     <ol class="list-decimal">
       <%= for genre <- @top_genres_count  do %>
         <li class="py-2">

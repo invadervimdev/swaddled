@@ -27,7 +27,7 @@ defmodule Swaddled.ImporterTest do
     @tag :external
     test "successfully loads genre data" do
       assert [] == Swaddled.Genres.list()
-      assert {:ok, genres_count} = Importer.load_genres()
+      assert {:ok, %{total_genres: genres_count}} = Importer.load_genres()
 
       genres = Swaddled.Genres.list()
       assert Enum.count(genres) == genres_count
